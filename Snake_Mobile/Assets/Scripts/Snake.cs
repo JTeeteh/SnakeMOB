@@ -51,8 +51,51 @@ public class Snake : MonoBehaviour
             _direction = SnakeDirection.Right;
         }
 
+        // Swipe controls
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.touches[0];
+
+            switch (touch.phase)
+            {
+                case TouchPhase.Began:
+                    touchStartPosition = touch.position;
+                    isSwiping = true;
+                    break;
+
+                case TouchPhase.Ended:
+                    if (isSwiping)
+                    {
+                        Vector2 swipeDirection = touch.position - touchStartPosition;
+                        float swipeMagnitude = swipeDirection.magnitude;
+
+                        if (swipeMagnitude > 100f) // Adjust this threshold as needed
+                        {
+                            swipeDirection.Normalize();
+
+                            // Check if the swipe is more horizontal or vertical
+                            if (Mathf.Abs(swipeDirection.x) > Mathf.Abs(swipeDirection.y))
+                            {
+                                // Horizontal swipe
+                                _direction = swipeDirection.x > 0f ? SnakeDirection.Right : SnakeDirection.Left;
+                            }
+                            else
+                            {
+                                // Vertical swipe
+                                _direction = swipeDirection.y > 0f ? SnakeDirection.Up : SnakeDirection.Down;
+                            }
+                        }
+                    }
+                    isSwiping = false;
+                    break;
+            }
+        }
+
         UpdateHeadRotation();
     }
+
+    private Vector2 touchStartPosition;
+    private bool isSwiping = false;
 
     private void FixedUpdate()
     {
