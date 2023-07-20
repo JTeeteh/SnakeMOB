@@ -26,6 +26,10 @@ public class Snake : MonoBehaviour
     public GameOverScreen gameOverScreen; // Reference to the GameOverScreen script
     private bool isGameOver = false; // Add a flag to track game over state
 
+    // Swipe control variables
+    private Vector2 _touchStartPos;
+    public float _minSwipeDistance = 50f;
+
     private void Start()
     {
         gameOverScreen.gameObject.SetActive(false); // Make sure Game Over screen is initially inactive
@@ -34,6 +38,45 @@ public class Snake : MonoBehaviour
 
     private void Update()
     {
+        // Check for touch input
+        if (Input.touchCount > 0)
+        {
+            Touch touch = Input.GetTouch(0);
+
+            // Check if the touch phase is Began
+            if (touch.phase == TouchPhase.Began)
+            {
+                // Store the initial touch position
+                _touchStartPos = touch.position;
+            }
+            // Check if the touch phase is Ended
+            else if (touch.phase == TouchPhase.Ended)
+            {
+                // Determine the swipe direction based on the initial and end touch positions
+                Vector2 swipeDirection = touch.position - _touchStartPos;
+
+                // Check if the swipe distance exceeds the minimum swipe distance
+                if (swipeDirection.magnitude >= _minSwipeDistance)
+                {
+                    // Normalize the swipe direction to prevent the snake from moving too fast
+                    swipeDirection.Normalize();
+
+                    // Check the direction of the swipe and update the snake direction accordingly
+                    if (Mathf.Abs(swipeDirection.x) > Mathf.Abs(swipeDirection.y))
+                    {
+                        // Swipe is horizontal
+                        _direction = (swipeDirection.x > 0) ? SnakeDirection.Right : SnakeDirection.Left;
+                    }
+                    else
+                    {
+                        // Swipe is vertical
+                        _direction = (swipeDirection.y > 0) ? SnakeDirection.Up : SnakeDirection.Down;
+                    }
+                }
+            }
+        }
+
+        // For debugging on PC, keep the WASD controls
         if (Input.GetKeyDown(KeyCode.W) && _direction != SnakeDirection.Down)
         {
             _direction = SnakeDirection.Up;
@@ -51,51 +94,8 @@ public class Snake : MonoBehaviour
             _direction = SnakeDirection.Right;
         }
 
-        // Swipe controls
-        if (Input.touchCount > 0)
-        {
-            Touch touch = Input.touches[0];
-
-            switch (touch.phase)
-            {
-                case TouchPhase.Began:
-                    touchStartPosition = touch.position;
-                    isSwiping = true;
-                    break;
-
-                case TouchPhase.Ended:
-                    if (isSwiping)
-                    {
-                        Vector2 swipeDirection = touch.position - touchStartPosition;
-                        float swipeMagnitude = swipeDirection.magnitude;
-
-                        if (swipeMagnitude > 100f) // Adjust this threshold as needed
-                        {
-                            swipeDirection.Normalize();
-
-                            // Check if the swipe is more horizontal or vertical
-                            if (Mathf.Abs(swipeDirection.x) > Mathf.Abs(swipeDirection.y))
-                            {
-                                // Horizontal swipe
-                                _direction = swipeDirection.x > 0f ? SnakeDirection.Right : SnakeDirection.Left;
-                            }
-                            else
-                            {
-                                // Vertical swipe
-                                _direction = swipeDirection.y > 0f ? SnakeDirection.Up : SnakeDirection.Down;
-                            }
-                        }
-                    }
-                    isSwiping = false;
-                    break;
-            }
-        }
-
         UpdateHeadRotation();
     }
-
-    private Vector2 touchStartPosition;
-    private bool isSwiping = false;
 
     private void FixedUpdate()
     {
