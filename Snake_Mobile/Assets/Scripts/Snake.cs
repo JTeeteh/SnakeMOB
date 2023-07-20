@@ -194,6 +194,10 @@ public class Snake : MonoBehaviour
         {
             GameOver();
         }
+        else if (other.CompareTag("Bullet"))
+        {
+            GameOver();
+        }
     }
 
     private void GameOver()

@@ -129,5 +129,5 @@ MonoBehaviour:
   moveInterval: 2
   bulletPrefab: {fileID: 3059077542478237637, guid: eb88971ccaca0424581df592f2d62296, type: 3}
   bulletSpeed: 20
-  shootInterval: 11111
+  shootInterval: 2.5
   spawnArea: {fileID: 7668124096932251362, guid: 5cac4b5900237a54c957bc15b66203f2, type: 3}
