@@ -261,7 +261,42 @@ public class Snake : MonoBehaviour
             float minY = spawnCollider.bounds.min.y;
             float maxY = spawnCollider.bounds.max.y;
 
-            Vector2 randomPosition = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+            // Define a maximum number of attempts to prevent an infinite loop
+            int maxAttempts = 100;
+            int attemptCount = 0;
+
+            Vector2 randomPosition;
+
+            // Keep generating a random position until a suitable position is found
+            do
+            {
+                randomPosition = new Vector2(Random.Range(minX, maxX), Random.Range(minY, maxY));
+                attemptCount++;
+
+                // Check if the random position is inside any obstacles
+                Collider2D[] hitColliders = Physics2D.OverlapCircleAll(randomPosition, 0.1f); // Adjust the radius as needed
+
+                bool isPositionValid = true;
+
+                foreach (Collider2D collider in hitColliders)
+                {
+                    if (collider.CompareTag("Obstacle"))
+                    {
+                        // The random position is inside an obstacle, mark it as invalid
+                        isPositionValid = false;
+                        break;
+                    }
+                }
+
+                // If the position is valid or the number of attempts exceeds the maximum, break the loop
+                if (isPositionValid || attemptCount >= maxAttempts)
+                {
+                    break;
+                }
+
+            } while (true);
+
+            // Instantiate the food at the final random position
             Instantiate(foodPrefab, randomPosition, Quaternion.identity);
         }
         else
