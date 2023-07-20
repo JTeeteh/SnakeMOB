@@ -65,12 +65,26 @@ public class Snake : MonoBehaviour
                     if (Mathf.Abs(swipeDirection.x) > Mathf.Abs(swipeDirection.y))
                     {
                         // Swipe is horizontal
-                        _direction = (swipeDirection.x > 0) ? SnakeDirection.Right : SnakeDirection.Left;
+                        if (swipeDirection.x > 0 && _direction != SnakeDirection.Left)
+                        {
+                            _direction = SnakeDirection.Right;
+                        }
+                        else if (swipeDirection.x < 0 && _direction != SnakeDirection.Right)
+                        {
+                            _direction = SnakeDirection.Left;
+                        }
                     }
                     else
                     {
                         // Swipe is vertical
-                        _direction = (swipeDirection.y > 0) ? SnakeDirection.Up : SnakeDirection.Down;
+                        if (swipeDirection.y > 0 && _direction != SnakeDirection.Down)
+                        {
+                            _direction = SnakeDirection.Up;
+                        }
+                        else if (swipeDirection.y < 0 && _direction != SnakeDirection.Up)
+                        {
+                            _direction = SnakeDirection.Down;
+                        }
                     }
                 }
             }
