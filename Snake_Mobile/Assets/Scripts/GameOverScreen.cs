@@ -19,6 +19,18 @@ public class GameOverScreen : MonoBehaviour
     {
         SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex); // Reload the current scene
     }
+    public void MainMenu()
+    {
+        SceneManager.LoadScene("MainMenu"); // Reload the current scene
+    }
+    public void CharacterSelect()
+    {
+        SceneManager.LoadScene("CharSelect"); // Reload the current scene
+    }
+    public void Play()
+    {
+        SceneManager.LoadScene("SnakeGame"); // Reload the current scene
+    }
 
     public void ExitButton()
     {
