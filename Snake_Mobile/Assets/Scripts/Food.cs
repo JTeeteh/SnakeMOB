@@ -41,6 +41,16 @@ public class Food : MonoBehaviour
         {
             moveDirection = -moveDirection;
             moveTimer = moveInterval;
+
+            // Rotate the game object when the food moves left or right
+            if (moveDirection > 0)
+            {
+                transform.rotation = Quaternion.Euler(0f, 0f, 0f); // Rotate to the right (original orientation)
+            }
+            else
+            {
+                transform.rotation = Quaternion.Euler(0f, 180f, 0f); // Rotate to the left (180 degrees)
+            }
         }
 
         Vector3 newPosition = transform.position + new Vector3(moveDirection * moveSpeed * Time.deltaTime, 0f, 0f);
@@ -60,6 +70,10 @@ public class Food : MonoBehaviour
             // Set the bullet's movement direction (up, down, left, right) randomly
             Vector2 direction = GetRandomDirection();
             bulletRb.velocity = direction * bulletSpeed;
+
+            // Update the bullet's rotation to match its movement direction
+            float angle = Mathf.Atan2(direction.y, direction.x) * Mathf.Rad2Deg;
+            bullet.transform.rotation = Quaternion.AngleAxis(angle, Vector3.forward);
 
             shootTimer = shootInterval;
         }

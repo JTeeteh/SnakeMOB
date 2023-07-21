@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/CharSelect.unity
     guid: bbdb44dbde2068a42b07127b37b699f2
   - enabled: 1
+    path: Assets/Scenes/Instruction.unity
+    guid: 0ec2770288a4ea640aa2a16eab6d75f0
+  - enabled: 1
     path: Assets/Scenes/SnakeGame.unity
     guid: 3fc8acdd13e6c734bafef6554d6fdbcd
   m_configObjects:
